@@ -6,6 +6,7 @@ import path from "path";
 
 import { getFormattedMessage } from "./formatters";
 import { sendTelegramMessage } from "./services/telegram";
+import { generateMessage } from "./formatters/formatter/templates/messageTemplates";
 
 dotenv.config();
 
@@ -20,11 +21,19 @@ app.use(express.static(path.join(__dirname, "public")));
 app.post("/webhook", async (req: Request, res: Response) => {
   const payload = req.body;
 
-  const message = getFormattedMessage(payload);
+  // 1. GitHub Webhook에서 수신한 payload를 포맷팅
+  const result = getFormattedMessage(payload);
+  if (!result) {
+    res.status(200).send("정의되지 않은 이벤트 (포맷터 없음)");
+  }
 
+  // 2. 포맷팅한 Data를 텔레그램 메시지로 변환
+  const message = generateMessage(result);
   if (!message) {
-    console.log("⚠️ 해당 이벤트는 처리 대상 아님");
-    res.status(200).send("No formatter matched");
+    res.status(200).send("정의되지 않은 메시지 형식");
+
+    // 3. 정의되지 않은 이벤트 axios(sendTelegramMessage) 전송 방지
+    return;
   }
 
   try {
