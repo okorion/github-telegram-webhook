@@ -29,7 +29,6 @@ export function generateMessage(
       return [
         `🚀 **[Push 발생]**`,
         `👤 **푸시한 사람:** ${resolvedPusher}`,
-        `🌿 **브랜치:** \`${branch}\``,
         `📝 **커밋 내역:**\n${commitLines}`,
       ].join("\n");
     }
@@ -47,14 +46,13 @@ export function generateMessage(
     }
 
     case "MERGE_REQUEST": {
-      const { title, action, author, targetBranch } = result.data;
+      const { title, action, author } = result.data;
       const resolvedAuthor = resolveUsername(author);
 
       return [
         `🔀 **[PR ${action}]**`,
         `🧑 **작성자:** ${resolvedAuthor}`,
         `📝 **제목:** ${title}`,
-        `🌿 **병합 대상 브랜치:** \`${targetBranch}\``,
         // 필요하다면 링크 포함 가능
         // `🔗 [PR 링크](${escapeMarkdown(url)})`,
       ].join("\n");

@@ -5,6 +5,7 @@ export interface CommentMessageData {
   issueTitle: string;
   comment: string;
   url: string;
+  author: string;
 }
 
 export const commentFormatter: BaseFormatter<CommentMessageData> = {
@@ -13,7 +14,7 @@ export const commentFormatter: BaseFormatter<CommentMessageData> = {
   },
 
   format(payload) {
-    const { comment, issue } = payload;
+    const { comment, issue, user } = payload;
 
     const result: MessageFormatResult<CommentMessageData> = {
       type: "COMMENT",
@@ -21,6 +22,7 @@ export const commentFormatter: BaseFormatter<CommentMessageData> = {
         issueTitle: issue.title,
         comment: comment.body,
         url: comment.html_url,
+        author: user.name,
       },
     };
 

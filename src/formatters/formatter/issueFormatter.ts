@@ -5,6 +5,7 @@ export interface IssueMessageData {
   action: string;
   title: string;
   url: string;
+  author: string;
 }
 
 export const issueFormatter: BaseFormatter<IssueMessageData> = {
@@ -13,7 +14,7 @@ export const issueFormatter: BaseFormatter<IssueMessageData> = {
   },
 
   format(payload) {
-    const { action, issue } = payload;
+    const { action, issue, user } = payload;
 
     const result: MessageFormatResult<IssueMessageData> = {
       type: "ISSUE",
@@ -21,6 +22,7 @@ export const issueFormatter: BaseFormatter<IssueMessageData> = {
         action,
         title: issue.title,
         url: issue.html_url,
+        author: user.name,
       },
     };
 
