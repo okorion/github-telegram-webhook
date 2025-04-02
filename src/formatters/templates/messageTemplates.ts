@@ -1,5 +1,10 @@
 import { MessageFormatResult } from "../types/messageTypes";
 
+// MarkdownV2 포맷 대응용 이스케이프 함수
+function escapeMarkdown(text: string): string {
+  return text.replace(/[_*[\]()~`>#+=|{}.!-]/g, "\\$&");
+}
+
 export function generateMessage(
   result: MessageFormatResult | null
 ): string | null {
@@ -9,29 +14,55 @@ export function generateMessage(
 
   switch (result.type) {
     case "PUSH": {
-      const { pusher, commits } = result.data;
+      const { pusher, commits, branch } = result.data;
       const commitLines = commits
-        .map((c: any) => `- ${c.message} (${c.url})`)
+        .map((c: any) => `- ${escapeMarkdown(c.message)}`)
         .join("\n");
-      return `🚀 *Push 이벤트 발생*\n*푸셔:* ${pusher}\n*커밋 내역:*\n${commitLines}`;
+
+      return [
+        `🚀 **[Push 발생]**`,
+        `👤 **푸시한 사람:** ${escapeMarkdown(pusher)}`,
+        `🌿 **브랜치:** \`${escapeMarkdown(branch)}\``,
+        `📝 **커밋 내역:**\n${commitLines}`,
+      ].join("\n");
     }
 
     case "ISSUE": {
-      const { title, action, url } = result.data;
-      return `📌 *이슈 ${action}*\n*제목:* ${title}\n🔗 ${url}`;
+      const { title, action, url, author } = result.data;
+      return [
+        `📌 **[이슈 ${escapeMarkdown(action)}]**`,
+        `🧑 **작성자:** ${escapeMarkdown(author)}`,
+        `📝 **제목:** ${escapeMarkdown(title)}`,
+        `🔗 [이슈 링크](${escapeMarkdown(url)})`,
+      ].join("\n");
     }
 
     case "MERGE_REQUEST": {
-      const { title, action, url, author } = result.data;
-      return `🔀 *PR ${action}*\n*제목:* ${title}\n*작성자:* ${author}\n🔗 ${url}`;
+      const { title, action, url, author, targetBranch } = result.data;
+      return [
+        `🔀 **[PR ${escapeMarkdown(action)}]**`,
+        `🧑 **작성자:** ${escapeMarkdown(author)}`,
+        `📝 **제목:** ${escapeMarkdown(title)}`,
+        `🌿 **병합 대상 브랜치:** \`${escapeMarkdown(targetBranch)}\``,
+        // 필요하다면 링크 포함 가능
+        // `🔗 [PR 링크](${escapeMarkdown(url)})`,
+      ].join("\n");
     }
 
     case "COMMENT": {
-      const { comment, issueTitle, url } = result.data;
-      return `💬 *이슈 코멘트*\n*이슈:* ${issueTitle}\n*내용:* ${comment}\n🔗 ${url}`;
+      const { comment, issueTitle, url, author } = result.data;
+      return [
+        `💬 **[이슈 코멘트]**`,
+        `🧑 **작성자:** ${escapeMarkdown(author)}`,
+        `🧵 **이슈 제목:** ${escapeMarkdown(issueTitle)}`,
+        `🗨️ **코멘트 내용:**\n"${escapeMarkdown(comment)}"`,
+        `🔗 [코멘트 링크](${escapeMarkdown(url)})`,
+      ].join("\n");
     }
 
     default:
-      return `⚠️ 알 수 없는 이벤트 타입입니다: ${result.type}`;
+      return `⚠️ **알 수 없는 이벤트 타입입니다:** \`${escapeMarkdown(
+        result.type
+      )}\``;
   }
 }
