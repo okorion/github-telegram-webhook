@@ -1,0 +1,26 @@
+<!-- src/public/index.html -->
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>텔레그램 연결 테스트</title>
+  </head>
+  <body>
+    <h2>📬 Telegram 연결 확인</h2>
+    <button onclick="sendTest()">메시지 전송 테스트</button>
+    <p id="result"></p>
+
+    <script>
+      async function sendTest() {
+        const result = document.getElementById("result");
+        try {
+          const res = await fetch("/test/telegram", { method: "POST" });
+          const json = await res.json();
+          result.textContent = json.message;
+        } catch (e) {
+          result.textContent = "에러 발생";
+        }
+      }
+    </script>
+  </body>
+</html>
