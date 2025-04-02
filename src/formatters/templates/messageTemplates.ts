@@ -1,4 +1,4 @@
-import { MessageFormatResult } from "../../types/messageTypes";
+import { MessageFormatResult } from "../types/messageTypes";
 
 export function generateMessage(
   result: MessageFormatResult | null

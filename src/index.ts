@@ -6,7 +6,7 @@ import path from "path";
 
 import { getFormattedMessage } from "./formatters";
 import { sendTelegramMessage } from "./services/telegram";
-import { generateMessage } from "./formatters/formatter/templates/messageTemplates";
+import { generateMessage } from "./formatters/templates/messageTemplates";
 
 dotenv.config();
 
