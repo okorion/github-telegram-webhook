@@ -14,7 +14,7 @@ export const issueFormatter: BaseFormatter<IssueMessageData> = {
   },
 
   format(payload) {
-    const { action, issue, user } = payload;
+    const { action, issue } = payload;
 
     const result: MessageFormatResult<IssueMessageData> = {
       type: "ISSUE",
@@ -22,7 +22,7 @@ export const issueFormatter: BaseFormatter<IssueMessageData> = {
         action,
         title: issue.title,
         url: issue.html_url,
-        author: user.name,
+        author: issue.user.login,
       },
     };
 

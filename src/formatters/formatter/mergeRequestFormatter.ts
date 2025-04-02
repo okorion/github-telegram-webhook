@@ -14,13 +14,13 @@ export const mergeRequestFormatter: BaseFormatter<MergeRequestMessageData> = {
   },
 
   format(payload) {
-    const { user, object_attributes } = payload;
+    const { pull_request, object_attributes } = payload;
 
     const result: MessageFormatResult<MergeRequestMessageData> = {
       type: "MERGE_REQUEST",
       data: {
         title: object_attributes.title,
-        author: user.name,
+        author: pull_request.user.login,
         url: object_attributes.url,
         action: object_attributes.action ?? "OPENED",
       },

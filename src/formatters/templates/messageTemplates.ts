@@ -22,7 +22,7 @@ export function generateMessage(
 
   switch (result.type) {
     case "PUSH": {
-      const { pusher, commits, branch } = result.data;
+      const { pusher, commits } = result.data;
       const resolvedPusher = resolveUsername(pusher.name);
       const commitLines = commits.map((c: any) => `- ${c.message}`).join("\n");
 
