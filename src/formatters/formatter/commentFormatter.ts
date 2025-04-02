@@ -1,11 +1,29 @@
-import { Formatter } from "./baseFormatter";
+import { MessageFormatResult } from "../types/messageTypes";
+import { BaseFormatter } from "./baseFormatter";
 
-export const commentFormatter: Formatter = {
+export interface CommentMessageData {
+  issueTitle: string;
+  comment: string;
+  url: string;
+}
+
+export const commentFormatter: BaseFormatter<CommentMessageData> = {
   canHandle(payload) {
     return payload.comment && payload.issue;
   },
+
   format(payload) {
-    const { comment, issue, repository } = payload;
-    return `💬 *이슈 코멘트*\n*레포:* ${repository.full_name}\n*이슈:* ${issue.title}\n*내용:* ${comment.body}`;
+    const { comment, issue } = payload;
+
+    const result: MessageFormatResult<CommentMessageData> = {
+      type: "COMMENT",
+      data: {
+        issueTitle: issue.title,
+        comment: comment.body,
+        url: comment.html_url,
+      },
+    };
+
+    return result;
   },
 };

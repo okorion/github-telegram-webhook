@@ -1,11 +1,29 @@
-import { Formatter } from "./baseFormatter";
+import { MessageFormatResult } from "../types/messageTypes";
+import { BaseFormatter } from "./baseFormatter";
 
-export const issueFormatter: Formatter = {
+export interface IssueMessageData {
+  action: string;
+  title: string;
+  url: string;
+}
+
+export const issueFormatter: BaseFormatter<IssueMessageData> = {
   canHandle(payload) {
     return payload.issue && payload.action;
   },
+
   format(payload) {
-    const { action, issue, repository } = payload;
-    return `📌 *이슈 ${action}*\n*레포:* ${repository.full_name}\n*제목:* ${issue.title}\n🔗 ${issue.html_url}`;
+    const { action, issue } = payload;
+
+    const result: MessageFormatResult<IssueMessageData> = {
+      type: "ISSUE",
+      data: {
+        action,
+        title: issue.title,
+        url: issue.html_url,
+      },
+    };
+
+    return result;
   },
 };
