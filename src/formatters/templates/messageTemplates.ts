@@ -13,14 +13,6 @@ function resolveUsername(githubId: string): string {
   return mapperJson[githubId] ?? githubId;
 }
 
-// MarkdownV2 포맷 대응용 이스케이프 함수
-function escapeMarkdown(text: any): string {
-  if (!text || typeof text !== "string") {
-    return "";
-  }
-  return text.replace(/[_*[\]()~`>#+=|{}.!-]/g, "\\$&");
-}
-
 export function generateMessage(
   result: MessageFormatResult | null
 ): string | null {
@@ -32,14 +24,12 @@ export function generateMessage(
     case "PUSH": {
       const { pusher, commits, branch } = result.data;
       const resolvedPusher = resolveUsername(pusher.name);
-      const commitLines = commits
-        .map((c: any) => `- ${escapeMarkdown(c.message)}`)
-        .join("\n");
+      const commitLines = commits.map((c: any) => `- ${c.message}`).join("\n");
 
       return [
         `🚀 **[Push 발생]**`,
-        `👤 **푸시한 사람:** ${escapeMarkdown(resolvedPusher)}`,
-        `🌿 **브랜치:** \`${escapeMarkdown(branch)}\``,
+        `👤 **푸시한 사람:** ${resolvedPusher}`,
+        `🌿 **브랜치:** \`${branch}\``,
         `📝 **커밋 내역:**\n${commitLines}`,
       ].join("\n");
     }
@@ -49,10 +39,10 @@ export function generateMessage(
       const resolvedAuthor = resolveUsername(author);
 
       return [
-        `📌 **[이슈 ${escapeMarkdown(action)}]**`,
-        `🧑 **작성자:** ${escapeMarkdown(resolvedAuthor)}`,
-        `📝 **제목:** ${escapeMarkdown(title)}`,
-        `🔗 [이슈 링크](${escapeMarkdown(url)})`,
+        `📌 **[이슈 ${action}]**`,
+        `🧑 **작성자:** ${resolvedAuthor}`,
+        `📝 **제목:** ${title}`,
+        `🔗 [이슈 링크](${url})`,
       ].join("\n");
     }
 
@@ -61,10 +51,10 @@ export function generateMessage(
       const resolvedAuthor = resolveUsername(author);
 
       return [
-        `🔀 **[PR ${escapeMarkdown(action)}]**`,
-        `🧑 **작성자:** ${escapeMarkdown(resolvedAuthor)}`,
-        `📝 **제목:** ${escapeMarkdown(title)}`,
-        `🌿 **병합 대상 브랜치:** \`${escapeMarkdown(targetBranch)}\``,
+        `🔀 **[PR ${action}]**`,
+        `🧑 **작성자:** ${resolvedAuthor}`,
+        `📝 **제목:** ${title}`,
+        `🌿 **병합 대상 브랜치:** \`${targetBranch}\``,
         // 필요하다면 링크 포함 가능
         // `🔗 [PR 링크](${escapeMarkdown(url)})`,
       ].join("\n");
@@ -76,16 +66,14 @@ export function generateMessage(
 
       return [
         `💬 **[이슈 코멘트]**`,
-        `🧑 **작성자:** ${escapeMarkdown(resolvedAuthor)}`,
-        `🧵 **이슈 제목:** ${escapeMarkdown(issueTitle)}`,
-        `🗨️ **코멘트 내용:**\n"${escapeMarkdown(comment)}"`,
-        `🔗 [코멘트 링크](${escapeMarkdown(url)})`,
+        `🧑 **작성자:** ${resolvedAuthor}`,
+        `🧵 **이슈 제목:** ${issueTitle}`,
+        `🗨️ **코멘트 내용:**\n"${comment}"`,
+        `🔗 [코멘트 링크](${url})`,
       ].join("\n");
     }
 
     default:
-      return `⚠️ **알 수 없는 이벤트 타입입니다:** \`${escapeMarkdown(
-        result.type
-      )}\``;
+      return `⚠️ **알 수 없는 이벤트 타입입니다:** \`${result.type}\``;
   }
 }

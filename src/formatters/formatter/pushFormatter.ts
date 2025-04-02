@@ -15,7 +15,6 @@ export const pushFormatter: BaseFormatter<PushMessageData> = {
     const pusher = payload.pusher?.name;
     const commits = payload.commits.map((c: any) => ({
       message: c.message,
-      url: c.url,
     }));
 
     const result: MessageFormatResult<PushMessageData> = {
