@@ -22,8 +22,8 @@ export function generateMessage(
 
   switch (result.type) {
     case "PUSH": {
-      const { pusher, commits } = result.data;
-      const resolvedPusher = resolveUsername(pusher.name);
+      const { author, commits } = result.data;
+      const resolvedPusher = resolveUsername(author);
       const commitLines = commits.map((c: any) => `- ${c.message}`).join("\n");
 
       return [
