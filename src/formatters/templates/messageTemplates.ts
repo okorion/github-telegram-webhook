@@ -10,7 +10,7 @@ const mapperRaw = fs.readFileSync(mapperPath, "utf-8");
 const mapperJson = JSON.parse(mapperRaw);
 
 export function escapeMarkdownV2(text: string): string {
-  return text.replace(/([_*\[\]()~`>#+\-=|{}.!\\])/g, "\\$1");
+  return text.replace(/([_\[\]()~`>#+\-=|{}.!\\])/g, "\\$1");
 }
 
 function escapeMarkdownV2Lines(lines: string[]): string {
@@ -34,8 +34,8 @@ export function generateMessage(
       const resolvedPusher = resolveUsername(author);
       const commitLines = commits.map((c: any) => `- ${c.message}`);
       lines = [
-        `[🚀 Git Push] ${resolvedPusher}`,
-        `📝 커밋 내역:\n${commitLines.join("\n")}`,
+        `**[🚀 Git Push] ${resolvedPusher}**`,
+        `📝 **커밋 내역**:\n${commitLines.join("\n")}`,
       ];
       break;
     }
@@ -44,19 +44,21 @@ export function generateMessage(
       const { title, action, url, author, issueNumber } = result.data;
       const resolvedAuthor = resolveUsername(author);
       lines = [
-        `[📌 이슈 ${action}] ${resolvedAuthor}`,
-        `📌 PR 번호: #${issueNumber} 📝 제목: ${title}`,
+        `**[📌 이슈 ${action}] ${resolvedAuthor}**`,
+        `📌 **ISSUE 번호**: #${issueNumber}`,
+        `📝 **제목**: ${title}`,
         `🔗 ${url}`,
       ];
       break;
     }
 
     case "PULL_REQUEST": {
-      const { title, action, author, url } = result.data;
+      const { prNumber, prTitle, action, author, url } = result.data;
       const resolvedAuthor = resolveUsername(author);
       lines = [
-        `[🔀 PR ${action}] ${resolvedAuthor}`,
-        `📝 제목: ${title}`,
+        `**[🔀 PR ${action}] ${resolvedAuthor}**`,
+        `📌 **PR 번호**: #${prNumber}`,
+        `📝 **제목**: ${prTitle}`,
         `🔗 ${url}`,
       ];
       break;
@@ -66,9 +68,9 @@ export function generateMessage(
       const { comment, issueTitle, url, author } = result.data;
       const resolvedAuthor = resolveUsername(author);
       lines = [
-        `[💬 이슈 코멘트] ${resolvedAuthor}`,
-        `🧵 이슈 제목: ${issueTitle}`,
-        `🗨️ 코멘트 내용:\n"${comment}"`,
+        `**[💬 이슈 코멘트] ${resolvedAuthor}**`,
+        `🧵 **이슈 제목**: ${issueTitle}`,
+        `🗨️ **코멘트 내용**:\n"${comment}"`,
         `🔗 ${url}`,
       ];
       break;
@@ -78,15 +80,16 @@ export function generateMessage(
       const { reviewer, prNumber, prTitle, url } = result.data;
       const resolvedReviewer = resolveUsername(reviewer);
       lines = [
-        `[✅ PR 리뷰 제출됨] ${resolvedReviewer}`,
-        `📌 PR 번호: #${prNumber} 📝 제목: ${prTitle}`,
+        `**[✅ PR 리뷰 제출됨] ${resolvedReviewer}**`,
+        `📌 **PR 번호**: #${prNumber}`,
+        `📝 **제목**: ${prTitle}`,
         `🔗 ${url}`,
       ];
       break;
     }
 
     default:
-      lines = [`⚠️ 알 수 없는 이벤트 타입입니다: ${result.type}`];
+      lines = [`**⚠️ 알 수 없는 이벤트 타입입니다: ${result.type}**`];
   }
 
   return escapeMarkdownV2Lines(lines);

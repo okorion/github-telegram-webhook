@@ -4,7 +4,10 @@ import dotenv from "dotenv";
 import path from "path";
 
 import { getFormattedMessage } from "./formatters";
-import { sendTelegramMessage } from "./services/telegram";
+import {
+  sendTelegramMessage,
+  sendTelegramMessageRaw,
+} from "./services/telegram";
 import { generateMessage } from "./formatters/templates/messageTemplates";
 import { notifyServerStarted } from "./services/lifecycleNotifier";
 
@@ -38,7 +41,7 @@ app.post("/webhook", async (req: Request, res: Response) => {
 
 app.post("/test/telegram", async (_req: Request, res: Response) => {
   try {
-    await sendTelegramMessage("✅ Telegram 연결 테스트 메시지입니다.");
+    await sendTelegramMessageRaw("✅ Telegram 연결 테스트 메시지입니다.");
     res.json({ ok: true, message: "메시지 전송 성공" });
   } catch (err) {
     console.error("테스트 메시지 전송 실패:", err);

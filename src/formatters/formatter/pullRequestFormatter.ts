@@ -2,7 +2,8 @@ import { MessageFormatResult } from "../types/messageTypes";
 import { BaseFormatter } from "./baseFormatter";
 
 export interface PullRequestMessageData {
-  title: string;
+  prNumber: number;
+  prTitle: string;
   author: string;
   url: string;
   action: string;
@@ -14,12 +15,13 @@ export const pullRequestFormatter: BaseFormatter<PullRequestMessageData> = {
   },
 
   format(payload) {
-    const { pull_request } = payload;
+    const { number, pull_request } = payload;
 
     const result: MessageFormatResult<PullRequestMessageData> = {
       type: "PULL_REQUEST",
       data: {
-        title: pull_request.title,
+        prNumber: number,
+        prTitle: pull_request.title,
         author: pull_request.user?.login,
         url: pull_request.html_url,
         action: payload.action.toUpperCase(),

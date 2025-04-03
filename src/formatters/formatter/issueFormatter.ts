@@ -6,6 +6,7 @@ export interface IssueMessageData {
   title: string;
   url: string;
   author: string;
+  issueNumber: number;
 }
 
 export const issueFormatter: BaseFormatter<IssueMessageData> = {
@@ -23,6 +24,7 @@ export const issueFormatter: BaseFormatter<IssueMessageData> = {
         title: issue.title,
         url: issue.html_url,
         author: issue.user.login,
+        issueNumber: issue.number,
       },
     };
 
