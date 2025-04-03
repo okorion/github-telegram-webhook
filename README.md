@@ -78,12 +78,13 @@ graph TD
 
 기본적으로 다음 이벤트에 대해 알림을 제공합니다:
 
-| 이벤트 유형     | 설명                        |
-| --------------- | --------------------------- |
-| `push`          | 브랜치에 푸시된 커밋 메시지 |
-| `issues`        | 이슈 열림, 닫힘 등          |
-| `issue_comment` | 이슈 코멘트 작성            |
-| `merge_request` | 병합 요청(MR or PR) 생성    |
+| 이벤트 유형            | 설명                        |
+| ---------------------- | --------------------------- |
+| `push`                 | 브랜치에 푸시된 커밋 메시지 |
+| `issues`               | 이슈 열림, 닫힘 등          |
+| `issue_comment`        | 이슈 코멘트 작성            |
+| `pull_request`         | 병합 요청(MR or PR) 생성    |
+| `pull_request_comment` | 병합 요청 코멘트 액션       |
 
 ---
 
@@ -151,6 +152,6 @@ curl -X POST http://localhost:3000/test/telegram
 
 ## 📎 참고
 
-- Telegram Bot API
+- [Telegram Bot API](https://core.telegram.org/bots/api)
 - [GitHub Webhook Events](https://docs.github.com/en/webhooks/webhook-events-and-payloads)
 - [ngrok - 로컬 서버 외부 연결](https://ngrok.com/)

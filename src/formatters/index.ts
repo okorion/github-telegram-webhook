@@ -1,14 +1,14 @@
 import { BaseFormatter } from "./formatter/baseFormatter";
 import { pushFormatter } from "./formatter/pushFormatter";
 import { issueFormatter } from "./formatter/issueFormatter";
-import { mergeRequestFormatter } from "./formatter/mergeRequestFormatter";
+import { pullRequestFormatter } from "./formatter/pullRequestFormatter";
 import { commentFormatter } from "./formatter/commentFormatter";
 import { MessageFormatResult } from "./types/messageTypes";
 
 const formatters: BaseFormatter[] = [
   pushFormatter,
   issueFormatter,
-  mergeRequestFormatter,
+  pullRequestFormatter,
   commentFormatter,
 ];
 

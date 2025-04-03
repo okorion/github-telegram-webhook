@@ -1,7 +1,7 @@
 export type MessageType =
   | "PUSH"
   | "ISSUE"
-  | "MERGE_REQUEST"
+  | "PULL_REQUEST"
   | "COMMENT"
   | "PULL_REQUEST_REVIEW";
 
