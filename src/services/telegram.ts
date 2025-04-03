@@ -9,6 +9,6 @@ export async function sendTelegramMessage(message: string) {
   await axios.post(telegramUrl, {
     chat_id: process.env.TELEGRAM_CHAT_ID,
     text: message,
-    parse_mode: "Markdown",
+    parse_mode: "MarkdownV2",
   });
 }
