@@ -13,10 +13,6 @@ function resolveUsername(githubId: string): string {
   return mapperJson[githubId] ?? githubId;
 }
 
-function escapeMarkdownV2(text: string): string {
-  return text.replace(/([_*\[\]()~`>#+\-=|{}.!\\])/g, "\\$1");
-}
-
 export function generateMessage(
   result: MessageFormatResult | null
 ): string | null {
@@ -25,50 +21,51 @@ export function generateMessage(
   switch (result.type) {
     case "PUSH": {
       const { author, commits } = result.data;
-      const resolvedPusher = escapeMarkdownV2(resolveUsername(author));
+      const resolvedPusher = resolveUsername(author);
       const commitLines = commits
-        .map((c: any) => `\\- ${escapeMarkdownV2(c.message)}`)
+        .map((c: any) => `\\- ${c.message}`)
         .join("\n");
 
       return [
-        `*\\[🚀 Push 발생\\]* 👤 *푸시한 사람:* ${resolvedPusher}`,
+        `*\\[🚀 Git Push \\]* ${resolvedPusher}`,
         `📝 *커밋 내역:*\n${commitLines}`,
       ].join("\n");
     }
 
     case "ISSUE": {
-      const { title, action, url, author } = result.data;
-      const resolvedAuthor = escapeMarkdownV2(resolveUsername(author));
-      const safeTitle = escapeMarkdownV2(title);
-      const safeAction = escapeMarkdownV2(action);
+      const { title, action, url, author, issueNumber } = result.data;
+      const resolvedAuthor = resolveUsername(author);
+      const safeTitle = title;
+      const safeAction = action;
 
       return [
-        `*\\[📌 이슈 ${safeAction}\\]* 🧑 *작성자:* ${resolvedAuthor}`,
+        `*\\[📌 이슈 ${safeAction}\\]* ${resolvedAuthor}`,
+        `📌 *PR 번호:* #${issueNumber} 📝 *제목:* ${safeTitle}`,
+        `🔗 ${url}`,
+      ].join("\n");
+    }
+
+    case "PULL_REQUEST": {
+      const { title, action, author, url } = result.data;
+      const resolvedAuthor = resolveUsername(author);
+      const safeTitle = title;
+      const safeAction = action;
+
+      return [
+        `*\\[🔀 PR ${safeAction}\\]* ${resolvedAuthor}`,
         `📝 *제목:* ${safeTitle}`,
         `🔗 ${url}`,
       ].join("\n");
     }
 
-    case "MERGE_REQUEST": {
-      const { title, action, author } = result.data;
-      const resolvedAuthor = escapeMarkdownV2(resolveUsername(author));
-      const safeTitle = escapeMarkdownV2(title);
-      const safeAction = escapeMarkdownV2(action);
-
-      return [
-        `*\\[🔀 PR ${safeAction}\\]* 🧑 *작성자:* ${resolvedAuthor}`,
-        `📝 *제목:* ${safeTitle}`,
-      ].join("\n");
-    }
-
     case "COMMENT": {
       const { comment, issueTitle, url, author } = result.data;
-      const resolvedAuthor = escapeMarkdownV2(resolveUsername(author));
-      const safeComment = escapeMarkdownV2(comment);
-      const safeIssueTitle = escapeMarkdownV2(issueTitle);
+      const resolvedAuthor = resolveUsername(author);
+      const safeComment = comment;
+      const safeIssueTitle = issueTitle;
 
       return [
-        `*\\[💬 이슈 코멘트\\]* 🧑 *작성자:* ${resolvedAuthor}`,
+        `*\\[💬 이슈 코멘트\\]* ${resolvedAuthor}`,
         `🧵 *이슈 제목:* ${safeIssueTitle}`,
         `🗨️ *코멘트 내용:*\n"${safeComment}"`,
         `🔗 ${url}`,
@@ -77,19 +74,17 @@ export function generateMessage(
 
     case "PULL_REQUEST_REVIEW": {
       const { reviewer, prNumber, prTitle, url } = result.data;
-      const resolvedReviewer = escapeMarkdownV2(resolveUsername(reviewer));
-      const safeTitle = escapeMarkdownV2(prTitle);
+      const resolvedReviewer = resolveUsername(reviewer);
+      const safeTitle = prTitle;
 
       return [
-        `*\\[✅ PR 리뷰 제출됨\\]* 👤 *리뷰어:* ${resolvedReviewer}`,
+        `*\\[✅ PR 리뷰 제출됨\\]* ${resolvedReviewer}`,
         `📌 *PR 번호:* #${prNumber} 📝 *제목:* ${safeTitle}`,
         `🔗 ${url}`,
       ].join("\n");
     }
 
     default:
-      return `⚠️ *알 수 없는 이벤트 타입입니다:* \`${escapeMarkdownV2(
-        result.type
-      )}\``;
+      return `⚠️ *알 수 없는 이벤트 타입입니다:* \`${result.type}\``;
   }
 }
