@@ -30,51 +30,70 @@ export function generateMessage(
 
   switch (result.type) {
     case "PUSH": {
-      const { author, commits } = result.data;
+      const { author, commits, ref } = result.data;
+
       const resolvedPusher = escapeMarkdownV2(resolveUsername(author));
-      const commitLines = commits.map(
-        (c: any) => `\\- ${escapeMarkdownV2(c.message)}`
-      );
+      const branchName = ref.replace("refs/heads/", "");
+      const escapedBranchName = escapeMarkdownV2(branchName);
+      const commitLines = commits
+        .map((c: any) => `\\- ${escapeMarkdownV2(c.message)}`)
+        .join("\n");
+
       lines = [
         `*\\[🚀 Git Push\\]* ${resolvedPusher}`,
-        `📝 *커밋 내역*\n${commitLines.join("\n")}`,
+        `🌿 *브랜치:* \`${escapedBranchName}\``,
+        `📝 *커밋 내역*\n${commitLines}`,
       ];
       break;
     }
 
     case "ISSUE": {
       const { title, action, url, author, issueNumber } = result.data;
+
+      const escapedAction = escapeMarkdownV2(action);
+      const escapedAuthor = escapeMarkdownV2(resolveUsername(author));
+      const escapedTitle = escapeMarkdownV2(title);
+      const escapedUrl = escapeMarkdownV2(url);
+
       lines = [
-        `*\\[📌 이슈 ${escapeMarkdownV2(action)}\\]* ${escapeMarkdownV2(
-          resolveUsername(author)
-        )}`,
+        `*\\[📌 이슈 ${escapedAction}\\]* ${escapedAuthor}`,
         `📌 *ISSUE 번호:* #${issueNumber}`,
-        `📝 *제목:* ${escapeMarkdownV2(title)}`,
-        `🔗 ${escapeMarkdownV2(url)}`,
+        `📝 *제목:* ${escapedTitle}`,
+        `🔗 ${escapedUrl}`,
       ];
       break;
     }
 
     case "PULL_REQUEST": {
       const { prNumber, prTitle, action, author, url } = result.data;
+
+      const escapedAction = escapeMarkdownV2(action);
+      const escapedAuthor = escapeMarkdownV2(resolveUsername(author));
+      const escapedTitle = escapeMarkdownV2(prTitle);
+      const escapedUrl = escapeMarkdownV2(url);
+
       lines = [
-        `*\\[🔀 PR ${escapeMarkdownV2(action)}\\]* ${escapeMarkdownV2(
-          resolveUsername(author)
-        )}`,
+        `*\\[🔀 PR ${escapedAction}\\]* ${escapedAuthor}`,
         `📌 *PR 번호:* #${prNumber}`,
-        `📝 *제목:* ${escapeMarkdownV2(prTitle)}`,
-        `🔗 ${escapeMarkdownV2(url)}`,
+        `📝 *제목:* ${escapedTitle}`,
+        `🔗 ${escapedUrl}`,
       ];
       break;
     }
 
     case "COMMENT": {
       const { comment, issueTitle, url, author } = result.data;
+
+      const escapedAuthor = escapeMarkdownV2(resolveUsername(author));
+      const escapedTitle = escapeMarkdownV2(issueTitle);
+      const escapedComment = escapeMarkdownV2(comment);
+      const escapedUrl = escapeMarkdownV2(url);
+
       lines = [
-        `*\\[💬 이슈 코멘트\\]* ${escapeMarkdownV2(resolveUsername(author))}`,
-        `🧵 *이슈 제목:* ${escapeMarkdownV2(issueTitle)}`,
-        `🗨️ *코멘트 내용:*\n"${escapeMarkdownV2(comment)}"`,
-        `🔗 ${escapeMarkdownV2(url)}`,
+        `*\\[💬 이슈 코멘트\\]* ${escapedAuthor}`,
+        `🧵 *이슈 제목:* ${escapedTitle}`,
+        `🗨️ *코멘트 내용:*\n"${escapedComment}"`,
+        `🔗 ${escapedUrl}`,
       ];
       break;
     }
@@ -82,30 +101,32 @@ export function generateMessage(
     case "PULL_REQUEST_REVIEW": {
       const { reviewer, prNumber, prTitle, url, approved, comment } =
         result.data;
+
+      const escapedReviewer = escapeMarkdownV2(resolveUsername(reviewer));
+      const escapedTitle = escapeMarkdownV2(prTitle);
+      const escapedComment = comment ? escapeMarkdownV2(comment) : null;
+      const escapedUrl = escapeMarkdownV2(url);
+      const statusText = approved ? "Approved!" : "리뷰 제출됨";
+
       lines = [
-        `*\\[✅ PR ${
-          approved ? "Approved!" : "리뷰 제출됨"
-        }\\]* ${escapeMarkdownV2(resolveUsername(reviewer))}`,
+        `*\\[✅ PR ${statusText}\\]* ${escapedReviewer}`,
         `📌 *PR 번호:* #${prNumber}`,
-        `📝 *제목:* ${escapeMarkdownV2(prTitle)}`,
+        `📝 *제목:* ${escapedTitle}`,
       ];
 
-      if (comment) {
+      if (escapedComment) {
         lines.push(`💬 *리뷰 코멘트*`);
-        lines.push(`${escapeMarkdownV2(comment)}`);
+        lines.push(escapedComment);
       }
 
-      lines.push(`🔗 ${escapeMarkdownV2(url)}`);
-
+      lines.push(`🔗 ${escapedUrl}`);
       break;
     }
 
     default:
-      lines = [
-        `⚠️ *알 수 없는 이벤트 타입입니다:* \`${escapeMarkdownV2(
-          result.type
-        )}\``,
-      ];
+      const escapedType = escapeMarkdownV2(result.type);
+
+      lines = [`⚠️ *알 수 없는 이벤트 타입입니다:* \`${escapedType}\``];
   }
 
   return lines.join("\n");

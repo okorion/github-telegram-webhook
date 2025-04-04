@@ -4,6 +4,7 @@ import { BaseFormatter } from "./baseFormatter";
 export interface PushMessageData {
   author: string;
   commits: { message: string; url: string }[];
+  ref: string;
 }
 
 export const pushFormatter: BaseFormatter<PushMessageData> = {
@@ -12,7 +13,7 @@ export const pushFormatter: BaseFormatter<PushMessageData> = {
   },
 
   format(payload) {
-    const { pusher, commits } = payload;
+    const { pusher, commits, ref } = payload;
     const arrayCommits = commits.map((c: any) => ({
       message: c.message,
     }));
@@ -22,6 +23,7 @@ export const pushFormatter: BaseFormatter<PushMessageData> = {
       data: {
         author: pusher.name,
         commits: arrayCommits,
+        ref: ref,
       },
     };
 
