@@ -5,8 +5,9 @@ import { pullRequestFormatter } from "./formatter/pullRequestFormatter";
 import { commentFormatter } from "./formatter/commentFormatter";
 import { MessageFormatResult } from "./types/messageTypes";
 
+// 메시지를 보내기 위한 포맷터들을 배열로 정의합니다.
 const formatters: BaseFormatter[] = [
-  pushFormatter,
+  // pushFormatter,
   issueFormatter,
   pullRequestFormatter,
   commentFormatter,
