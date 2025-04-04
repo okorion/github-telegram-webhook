@@ -57,7 +57,7 @@ export function generateMessage(
 
       lines = [
         `*\\[📌 이슈 ${escapedAction}\\]* ${escapedAuthor}`,
-        `📌 *ISSUE 번호:* #${issueNumber}`,
+        `📌 *ISSUE 번호:* \\#${issueNumber}`,
         `📝 *제목:* ${escapedTitle}`,
         `🔗 ${escapedUrl}`,
       ];
@@ -77,7 +77,7 @@ export function generateMessage(
 
       lines = [
         `*\\[🔀 PR ${escapedAction}\\]* ${escapedAuthor}`,
-        `📌 *PR 번호:* #${prNumber}`,
+        `📌 *PR 번호:* \\#${prNumber}`,
         `📝 *제목:* ${escapedTitle}`,
         `🌿 *브랜치:* \`${escapedHeadBranch}\` → \`${escapedBaseBranch}\``,
         `🔗 ${escapedUrl}`,
@@ -114,7 +114,7 @@ export function generateMessage(
 
       lines = [
         `*\\[✅ PR ${statusText}\\]* ${escapedReviewer}`,
-        `📌 *PR 번호:* #${prNumber}`,
+        `📌 *PR 번호:* \\#${prNumber}`,
         `📝 *제목:* ${escapedTitle}`,
       ];
 
