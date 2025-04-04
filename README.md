@@ -213,4 +213,4 @@ case "RELEASE": {
 
 - [Telegram Bot API](https://core.telegram.org/bots/api)
 - [GitHub Webhook Events](https://docs.github.com/en/webhooks/webhook-events-and-payloads)
-- [ngrok - 로컬 서버 외부 연결](https://ngrok.com/)
+- [ngrok - 로컬 서버 외부 연결](https://ngrok.com/)  => **로컬 서버 운용 시, 서버 정상 동작을 위해 ngrok으로 발급 받은 주소를 GitHub Repository Webhook에 등록하는 과정 필수!**
