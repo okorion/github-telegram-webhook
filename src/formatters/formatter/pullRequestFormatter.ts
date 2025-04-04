@@ -7,6 +7,8 @@ export interface PullRequestMessageData {
   author: string;
   url: string;
   action: string;
+  baseBranch: string;
+  headBranch: string;
 }
 
 export const pullRequestFormatter: BaseFormatter<PullRequestMessageData> = {
@@ -25,6 +27,8 @@ export const pullRequestFormatter: BaseFormatter<PullRequestMessageData> = {
         author: pull_request.user?.login,
         url: pull_request.html_url,
         action: payload.action.toUpperCase(),
+        baseBranch: pull_request.base.ref,
+        headBranch: pull_request.head.ref,
       },
     };
 

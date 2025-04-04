@@ -65,17 +65,21 @@ export function generateMessage(
     }
 
     case "PULL_REQUEST": {
-      const { prNumber, prTitle, action, author, url } = result.data;
+      const { prNumber, prTitle, action, author, url, baseBranch, headBranch } =
+        result.data;
 
       const escapedAction = escapeMarkdownV2(action);
       const escapedAuthor = escapeMarkdownV2(resolveUsername(author));
       const escapedTitle = escapeMarkdownV2(prTitle);
       const escapedUrl = escapeMarkdownV2(url);
+      const escapedHeadBranch = escapeMarkdownV2(headBranch);
+      const escapedBaseBranch = escapeMarkdownV2(baseBranch);
 
       lines = [
         `*\\[🔀 PR ${escapedAction}\\]* ${escapedAuthor}`,
         `📌 *PR 번호:* #${prNumber}`,
         `📝 *제목:* ${escapedTitle}`,
+        `🌿 *브랜치:* \`${escapedHeadBranch}\` → \`${escapedBaseBranch}\``,
         `🔗 ${escapedUrl}`,
       ];
       break;
