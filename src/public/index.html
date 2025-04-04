@@ -9,6 +9,12 @@
     <button onclick="sendTest()">메시지 전송 테스트</button>
     <p id="result"></p>
 
+    <h2>🐱‍🏍 Message 포맷팅 확인</h2>
+    <button onclick="sendFormatAndGenerateMessageTest()">
+      Dummy Payload 전송 테스트
+    </button>
+    <p id="messageResult"></p>
+
     <script>
       async function sendTest() {
         const result = document.getElementById("result");
@@ -16,8 +22,27 @@
           const res = await fetch("/test/telegram", { method: "POST" });
           const json = await res.json();
           result.textContent = json.message;
+          result.style.fontWeight = "bold";
         } catch (e) {
-          result.textContent = "에러 발생";
+          result.style.color = "red";
+          result.style.fontWeight = "bold";
+          result.textContent = "에러 발생: " + e.message;
+        }
+      }
+
+      async function sendFormatAndGenerateMessageTest() {
+        const result = document.getElementById("messageResult");
+        try {
+          const res = await fetch("/test/format-and-generate", {
+            method: "POST",
+          });
+          const json = await res.json();
+          result.textContent = json.message;
+          result.style.fontWeight = "bold";
+        } catch (e) {
+          result.style.color = "red";
+          result.style.fontWeight = "bold";
+          result.textContent = "에러 발생: " + e.message;
         }
       }
     </script>

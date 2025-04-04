@@ -96,7 +96,7 @@ export function generateMessage(
       lines = [
         `*\\[💬 이슈 코멘트\\]* ${escapedAuthor}`,
         `🧵 *이슈 제목:* ${escapedTitle}`,
-        `🗨️ *코멘트 내용:*\n"${escapedComment}"`,
+        `🗨️ *코멘트 내용*\n"${escapedComment}"`,
         `🔗 ${escapedUrl}`,
       ];
       break;
