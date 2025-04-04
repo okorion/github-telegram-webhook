@@ -4,10 +4,26 @@ import path from "path";
 
 const mapperPath = path.join(
   __dirname,
-  "../../../private/github-user-mapping.json"
+  "../../../private/github-user-mapping.json" // private/github-user-mapping_dummy.json -> private/github-user-mapping.json 바꾸기
 );
-const mapperRaw = fs.readFileSync(mapperPath, "utf-8");
-const mapperJson = JSON.parse(mapperRaw);
+
+let mapperJson: Record<string, string> = {};
+
+if (fs.existsSync(mapperPath)) {
+  try {
+    const mapperRaw = fs.readFileSync(mapperPath, "utf-8");
+    mapperJson = JSON.parse(mapperRaw);
+  } catch (err) {
+    console.warn(
+      "⚠️ GitHub user mapping 파일을 파싱할 수 없습니다. 무시하고 진행합니다."
+    );
+    mapperJson = {};
+  }
+} else {
+  console.info(
+    "ℹ️ GitHub user mapping 파일이 없습니다. 기본값으로 진행합니다."
+  );
+}
 
 function resolveUsername(githubId: string): string {
   return mapperJson[githubId] ?? githubId;
