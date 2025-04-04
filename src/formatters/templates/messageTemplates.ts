@@ -17,8 +17,8 @@ export function escapeMarkdownV2(text: string): string {
   return text.replace(/([_*\[\]()~`>#+\-=|{}.!\\])/g, "\\$1");
 }
 
-function escapeMarkdownV2Lines(lines: string[]): string {
-  return lines.map((line) => escapeMarkdownV2(line)).join("\n");
+function capitalizeFirst(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 export function generateMessage(
@@ -68,7 +68,7 @@ export function generateMessage(
       const { prNumber, prTitle, action, author, url, baseBranch, headBranch } =
         result.data;
 
-      const escapedAction = escapeMarkdownV2(action);
+      const escapedAction = escapeMarkdownV2(capitalizeFirst(action));
       const escapedAuthor = escapeMarkdownV2(resolveUsername(author));
       const escapedTitle = escapeMarkdownV2(prTitle);
       const escapedUrl = escapeMarkdownV2(url);
