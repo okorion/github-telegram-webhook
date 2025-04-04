@@ -9,6 +9,7 @@ GitHub 이벤트 발생 시 알림 메시지를 **Telegram 자동 알림**을 �
 - Telegram Bot API를 통한 메시지 전송
 - 불필요한 이벤트 필터링 (예: `push` 알람 OFF, PR `opened`/`approved`만 알림 등)
 - GitHub ID → 실제 이름 매핑 지원 (`github-user-mapping.json`)
+
 ---
 
 ## 🚀 프로젝트 시작 방법
@@ -86,7 +87,7 @@ graph TD
 
 | 이벤트 유형            | 설명                        |
 | ---------------------- | --------------------------- |
-| ~`push`~                 | ~브랜치에 푸시된 커밋 메시지~ |
+| `push`                 | 브랜치에 푸시된 커밋 메시지 |
 | `issues`               | 이슈 열림, 닫힘 등          |
 | `issue_comment`        | 이슈 코멘트 작성            |
 | `pull_request`         | 병합 요청(MR or PR) 생성    |
@@ -95,6 +96,7 @@ graph TD
 ---
 
 ## ✏️ 텔레그램 알림 메시지 예시
+
 ### Push Event
 
 ```
@@ -166,7 +168,8 @@ const formatters: BaseFormatter[] = [
 ];
 ```
 
-## 
+##
+
 6. **`/src/templates/generateMessage.ts`** 에서 해당 type에 대한 메시지 추가
 
 ```ts
@@ -190,10 +193,10 @@ case "RELEASE": {
 
 `http://localhost:3000` 접속
 
-|TEST|메시지 확인|
-|-|-|
-|![image](https://github.com/user-attachments/assets/c9bd204a-89b4-41ce-934b-be3ee35b2b0b)|![image](https://github.com/user-attachments/assets/b1186f4d-b4e8-425d-962e-7749834d9a69)|
-|![image](https://github.com/user-attachments/assets/4c40d8a8-779c-433d-ab39-3095895ba774)|![image](https://github.com/user-attachments/assets/b49c296e-85ed-4682-9edd-0317b6717d73)|
+| TEST                                                                                      | 메시지 확인                                                                               |
+| ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| ![image](https://github.com/user-attachments/assets/c9bd204a-89b4-41ce-934b-be3ee35b2b0b) | ![image](https://github.com/user-attachments/assets/b1186f4d-b4e8-425d-962e-7749834d9a69) |
+| ![image](https://github.com/user-attachments/assets/4c40d8a8-779c-433d-ab39-3095895ba774) | ![image](https://github.com/user-attachments/assets/b49c296e-85ed-4682-9edd-0317b6717d73) |
 
 ---
 
