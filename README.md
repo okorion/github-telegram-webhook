@@ -1,8 +1,14 @@
 # 📦 GitHub → Telegram Webhook 알림봇
 
-GitHub Webhook 이벤트를 받아 **텔레그램으로 자동 알림**을 보내는 Node.js 프로젝트입니다.  
-Webhook 이벤트 타입별로 메시지를 포맷팅해 직관적인 형태로 받아볼 수 있습니다.
+GitHub 이벤트 발생 시 알림 메시지를 **Telegram 자동 알림**을 전송하는 Webhook 서버입니다. 특정 이벤트 유형에 따라 메시지를 포맷팅하고, 텔레그램으로 전송됩니다.
 
+## 🚀 주요 기능
+
+- GitHub `push`, `issue`, `pull_request`, `comment`, `pull_request_review` 이벤트 수신
+- 이벤트에 따라 마크다운V2 포맷으로 메시지 변환
+- Telegram Bot API를 통한 메시지 전송
+- 불필요한 이벤트 필터링 (예: `push` 알람 OFF, PR `opened`/`approved`만 알림 등)
+- GitHub ID → 실제 이름 매핑 지원 (`github-user-mapping.json`)
 ---
 
 ## 🚀 프로젝트 시작 방법
@@ -80,7 +86,7 @@ graph TD
 
 | 이벤트 유형            | 설명                        |
 | ---------------------- | --------------------------- |
-| `push`                 | 브랜치에 푸시된 커밋 메시지 |
+| ~`push`~                 | ~브랜치에 푸시된 커밋 메시지~ |
 | `issues`               | 이슈 열림, 닫힘 등          |
 | `issue_comment`        | 이슈 코멘트 작성            |
 | `pull_request`         | 병합 요청(MR or PR) 생성    |
@@ -89,21 +95,54 @@ graph TD
 ---
 
 ## ✏️ 텔레그램 알림 메시지 예시
+### Push Event
 
 ```
-🚀 Push 이벤트 발생
-푸셔: 사용자명
-커밋 내역:
-- Fix: 로그인 오류 수정 (https://github.com/xxx/commit/abc123)
+[🚀 Git Push] 홍길동
+🌿 브랜치: `main`
+📝 커밋 내역
+- feat: PR 메시지 브랜치 추가
+- fix: escape 오류 수정
+```
 
-📌 이슈 opened
-제목: 로그인 불가 현상
-🔗 https://github.com/xxx/issues/42
+### Pull Request Opened
 
-💬 이슈 코멘트
-이슈: 로그인 불가 현상
-내용: 저도 같은 현상이 있어요
-🔗 https://github.com/xxx/issues/42#issuecomment-111
+```
+[🔀 PR Opened] 홍길동
+📌 PR 번호: #123
+📝 제목: 로그인 기능 추가
+🌿 브랜치: `feature/login` → `main`
+🔗 https://github.com/your-repo/pull/123
+```
+
+### Pull Request Approved
+
+```
+[✅ PR Approved!] 홍길동
+📌 PR 번호: #123
+📝 제목: 로그인 기능 추가
+💬 리뷰 코멘트
+Looks good to me!
+🔗 https://github.com/your-repo/pull/123
+```
+
+### Issue Created
+
+```
+[📌 이슈 opened] 홍길동
+📌 ISSUE 번호: #456
+📝 제목: 로그인 오류 발생
+🔗 https://github.com/your-repo/issues/456
+```
+
+### Comment Event
+
+```
+[💬 이슈 코멘트] 홍길동
+🧵 이슈 제목: 로그인 오류 발생
+🗨️ 코멘트 내용:
+"동일 현상 확인했습니다."
+🔗 https://github.com/your-repo/issues/456#issuecomment-7890
 ```
 
 ---
@@ -113,7 +152,22 @@ graph TD
 1. **`/src/formatters/`** 폴더에 새 formatter 파일을 추가
 2. `canHandle(payload)` → 이벤트 감지 조건 정의
 3. `format(payload)` → `type` + `data` 구조로 반환
-4. **`/src/templates/generateMessage.ts`**에서 해당 type에 대한 메시지 추가
+4. `MessageFormatResult` -> `MessageType` 에 해당 포맷 타입 정의
+5. `src/formatters/index.ts`에서 포맷터 등록
+
+```
+import { yourFormatter } from "./formatter/yourFormatter";
+
+const formatters: BaseFormatter[] = [
+  issueFormatter,
+  pullRequestFormatter,
+  commentFormatter,
+  yourFormatter, // ✅ 추가
+];
+```
+
+## 
+6. **`/src/templates/generateMessage.ts`** 에서 해당 type에 대한 메시지 추가
 
 ```ts
 // 예시 generateMessage.ts
@@ -134,19 +188,21 @@ case "RELEASE": {
 
 ## 🧪 테스트 방법
 
-```bash
-curl -X POST http://localhost:3000/test/telegram
-```
+`http://localhost:3000` 접속
 
-> 텔레그램 봇이 연결되었는지 테스트 메시지를 전송합니다.
+|연결 확인|메시지 확인|
+|-|-|
+|![image](https://github.com/user-attachments/assets/c9bd204a-89b4-41ce-934b-be3ee35b2b0b)|![image](https://github.com/user-attachments/assets/b1186f4d-b4e8-425d-962e-7749834d9a69)|
+
 
 ---
 
-## 🙌 기여 방법
+## 📌 유의사항
 
-1. 포맷터 추가
-2. 템플릿 개선 (HTML 지원 등)
-3. 슬랙, Discord 등 멀티 채널 확장도 환영합니다!
+- 모든 특수문자는 반드시 이스케이프 필요 (특히 `*`, `_`, `-`, `.` 등)
+- `escapeMarkdownV2()` 유틸 함수로 문자열을 이스케이프 처리 후 전송해야 텔레그램 API에서 오류 없음
+
+배포 후 브랜치에 커밋이 푸시되었을 때, 이 텔레그램 봇이 적절한 메시지를 자동 전송하도록 동작합니다.
 
 ---
 
