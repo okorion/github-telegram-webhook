@@ -193,10 +193,10 @@ case "RELEASE": {
 
 `http://localhost:3000` 접속
 
-| TEST                                                                                      | 메시지 확인                                                                               |
-| ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| ![image](https://github.com/user-attachments/assets/c9bd204a-89b4-41ce-934b-be3ee35b2b0b) | ![image](https://github.com/user-attachments/assets/b1186f4d-b4e8-425d-962e-7749834d9a69) |
-| ![image](https://github.com/user-attachments/assets/4c40d8a8-779c-433d-ab39-3095895ba774) | ![image](https://github.com/user-attachments/assets/b49c296e-85ed-4682-9edd-0317b6717d73) |
+| TEST                                                                                      | Client 메시지 확인1 | Telegram 메시지 확인2 |
+| ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | - |
+| ![image](https://github.com/user-attachments/assets/fe10e1a9-d6a5-4f13-9cd0-0e05baf304af) | ![image](https://github.com/user-attachments/assets/4f795b94-290b-401b-8a0f-2a2c3e3f9f4d) | ![image](https://github.com/user-attachments/assets/b1186f4d-b4e8-425d-962e-7749834d9a69) |
+| ![image](https://github.com/user-attachments/assets/bc4e394b-6588-48ea-99b3-a9228f87685f) | ![image](https://github.com/user-attachments/assets/6054b024-6f5b-43eb-a9cf-2587fa6f46bb) | ![image](https://github.com/user-attachments/assets/b49c296e-85ed-4682-9edd-0317b6717d73) |
 
 ---
 
