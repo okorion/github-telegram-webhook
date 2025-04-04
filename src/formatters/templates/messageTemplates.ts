@@ -33,7 +33,7 @@ export function generateMessage(
       const { author, commits, ref } = result.data;
 
       const resolvedPusher = escapeMarkdownV2(resolveUsername(author));
-      const branchName = ref.replace("refs/heads/", "");
+      const branchName = escapeMarkdownV2(ref.replace("refs/heads/", ""));
       const escapedBranchName = escapeMarkdownV2(branchName);
       const commitLines = commits
         .map((c: any) => `\\- ${escapeMarkdownV2(c.message)}`)
@@ -110,10 +110,12 @@ export function generateMessage(
       const escapedTitle = escapeMarkdownV2(prTitle);
       const escapedComment = comment ? escapeMarkdownV2(comment) : null;
       const escapedUrl = escapeMarkdownV2(url);
-      const statusText = approved ? "Approved!" : "리뷰 제출됨";
+      const statusText = approved
+        ? escapeMarkdownV2("Approved")
+        : escapeMarkdownV2("리뷰 제출됨");
 
       lines = [
-        `*\\[✅ PR ${statusText}\\]* ${escapedReviewer}`,
+        `*\\[🙋‍♂️ PR ${statusText}\\]* ${escapedReviewer}`,
         `📌 *PR 번호:* \\#${prNumber}`,
         `📝 *제목:* ${escapedTitle}`,
       ];

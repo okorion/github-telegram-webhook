@@ -35,11 +35,8 @@ router.post(
       return;
     }
 
-    console.log("Formatted payload:", payload);
     const result = getFormattedMessage(payload);
-    console.log("Formatted result:", result);
     const message = generateMessage(result);
-    console.log("Formatted message:", message);
 
     try {
       if (message) {
@@ -49,6 +46,7 @@ router.post(
         res.status(200).json({ ok: false, message: "생성된 메시지가 없음" });
       }
     } catch (e) {
+      console.error("테스트 메시지 전송 실패:", e);
       res.status(500).json({ ok: false, message: "메시지 전송 실패" });
     }
   }
