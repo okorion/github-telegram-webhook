@@ -213,7 +213,7 @@ case "RELEASE": {
 | TEST                                                                                      | Client 메시지 확인1 | Telegram 메시지 확인2 |
 | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | - |
 | ![image](https://github.com/user-attachments/assets/fe10e1a9-d6a5-4f13-9cd0-0e05baf304af) | ![image](https://github.com/user-attachments/assets/4f795b94-290b-401b-8a0f-2a2c3e3f9f4d) | ![image](https://github.com/user-attachments/assets/b1186f4d-b4e8-425d-962e-7749834d9a69) |
-| ![image](https://github.com/user-attachments/assets/bc4e394b-6588-48ea-99b3-a9228f87685f) | ![image](https://github.com/user-attachments/assets/6054b024-6f5b-43eb-a9cf-2587fa6f46bb) | ![image](https://github.com/user-attachments/assets/b49c296e-85ed-4682-9edd-0317b6717d73) |
+| ![image](https://github.com/user-attachments/assets/bc4e394b-6588-48ea-99b3-a9228f87685f) | ![image](https://github.com/user-attachments/assets/6054b024-6f5b-43eb-a9cf-2587fa6f46bb) |![image](https://github.com/user-attachments/assets/e526fed6-493b-44a1-926d-984d778177f0)|
 
 ---
 
