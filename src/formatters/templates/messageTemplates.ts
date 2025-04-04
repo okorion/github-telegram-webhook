@@ -80,15 +80,23 @@ export function generateMessage(
     }
 
     case "PULL_REQUEST_REVIEW": {
-      const { reviewer, prNumber, prTitle, url } = result.data;
+      const { reviewer, prNumber, prTitle, url, approved, comment } =
+        result.data;
       lines = [
-        `*\\[✅ PR 리뷰 제출됨\\]* ${escapeMarkdownV2(
-          resolveUsername(reviewer)
-        )}`,
+        `*\\[✅ PR ${
+          approved ? "Approved!" : "리뷰 제출됨"
+        }\\]* ${escapeMarkdownV2(resolveUsername(reviewer))}`,
         `📌 *PR 번호:* #${prNumber}`,
         `📝 *제목:* ${escapeMarkdownV2(prTitle)}`,
-        `🔗 ${escapeMarkdownV2(url)}`,
       ];
+
+      if (comment) {
+        lines.push(`💬 *리뷰 코멘트*`);
+        lines.push(`${escapeMarkdownV2(comment)}`);
+      }
+
+      lines.push(`🔗 ${escapeMarkdownV2(url)}`);
+
       break;
     }
 
