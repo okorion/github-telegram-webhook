@@ -37,7 +37,7 @@ export function generateMessage(
       );
       lines = [
         `*\\[🚀 Git Push\\]* ${resolvedPusher}`,
-        `📝 *커밋 내역:*\n${commitLines.join("\n")}`,
+        `📝 *커밋 내역*\n${commitLines.join("\n")}`,
       ];
       break;
     }
