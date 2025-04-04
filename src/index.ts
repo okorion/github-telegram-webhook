@@ -4,12 +4,11 @@ import dotenv from "dotenv";
 import path from "path";
 
 import { getFormattedMessage } from "./formatters";
-import {
-  sendTelegramMessage,
-  sendTelegramMessageRaw,
-} from "./services/telegram";
+import { sendTelegramMessage } from "./services/telegram";
 import { generateMessage } from "./formatters/templates/messageTemplates";
 import { notifyServerStarted } from "./services/lifecycleNotifier";
+
+import testRoutes from "./routes/testRoutes";
 
 dotenv.config();
 
@@ -39,43 +38,8 @@ app.post("/webhook", async (req: Request, res: Response) => {
   }
 });
 
-app.post("/test/telegram", async (_req: Request, res: Response) => {
-  try {
-    await sendTelegramMessageRaw("✅ Telegram 연결 테스트 메시지입니다.");
-    res.json({ ok: true, message: "메시지 전송 성공" });
-  } catch (err) {
-    console.error("테스트 메시지 전송 실패:", err);
-    res.status(500).json({ ok: false, message: "메시지 전송 실패" });
-  }
-});
-
-app.post("/test/format-and-generate", async (_req: Request, res: Response) => {
-  const dummyPayload = {
-    action: "opened",
-    pull_request: {
-      number: 123,
-      title: "로그인 기능 추가",
-      user: { login: "Joong-Rainy" },
-      base: { ref: "main" },
-      head: { ref: "feature/login" },
-      html_url: "https://github.com/your-repo/pull/123",
-    },
-  };
-
-  const result = getFormattedMessage(dummyPayload);
-  const message = generateMessage(result);
-
-  try {
-    if (message) {
-      await sendTelegramMessage(message);
-      res.json({ ok: true, message: "Message 포맷팅 확인 성공" });
-    } else {
-      res.status(200).json({ ok: false, message: "생성된 메시지가 없음" });
-    }
-  } catch (e) {
-    res.status(500).json({ ok: false, message: "메시지 전송 실패" });
-  }
-});
+// 테스트 라우트 추가
+app.use("/", testRoutes);
 
 // 서버 시작
 app.listen(port, async () => {

@@ -3,17 +3,88 @@
   <head>
     <meta charset="UTF-8" />
     <title>텔레그램 연결 테스트</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        padding: 2rem;
+        background-color: #f9f9f9;
+      }
+
+      h2 {
+        color: #333;
+        display: flex;
+        justify-content: center;
+      }
+
+      button {
+        padding: 10px 16px;
+        margin: 6px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      .container {
+        display: flex;
+        justify-content: center;
+      }
+
+      .result-container {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .button-container {
+        justify-content: center;
+      }
+
+      p {
+        font-size: 15px;
+        margin-top: 1rem;
+        color: #333;
+      }
+    </style>
   </head>
+
   <body>
     <h2>📬 Telegram 연결 확인</h2>
-    <button onclick="sendTest()">메시지 전송 테스트</button>
-    <p id="result"></p>
+    <div class="container">
+      <div class="result-container">
+        <div class="button-container">
+          <button onclick="sendTest()">메시지 전송 테스트</button>
+          <p id="result"></p>
+        </div>
+      </div>
+    </div>
 
-    <h2>🐱‍🏍 Message 포맷팅 확인</h2>
-    <button onclick="sendFormatAndGenerateMessageTest()">
-      Dummy Payload 전송 테스트
-    </button>
-    <p id="messageResult"></p>
+    <h2>🐱‍🏍 Message 포맷팅 테스트</h2>
+    <div class="container">
+      <div class="result-container">
+        <div class="button-container">
+          <button onclick="sendPayload('pushPayload')">Push 테스트</button>
+          <button onclick="sendPayload('issuePayload')">Issue 테스트</button>
+          <button onclick="sendPayload('commentPayload')">
+            Comment 테스트
+          </button>
+          <button onclick="sendPayload('pullRequestPayload')">
+            Pull Request 테스트
+          </button>
+          <button onclick="sendPayload('pullRequestReviewPayload')">
+            Pull Request Review 테스트
+          </button>
+          <p id="messageResult"></p>
+        </div>
+      </div>
+    </div>
 
     <script>
       async function sendTest() {
@@ -30,15 +101,16 @@
         }
       }
 
-      async function sendFormatAndGenerateMessageTest() {
+      async function sendPayload(type) {
         const result = document.getElementById("messageResult");
         try {
-          const res = await fetch("/test/format-and-generate", {
+          const res = await fetch(`/test/format-and-generate/${type}`, {
             method: "POST",
           });
           const json = await res.json();
           result.textContent = json.message;
           result.style.fontWeight = "bold";
+          result.style.color = json.ok ? "green" : "orange";
         } catch (e) {
           result.style.color = "red";
           result.style.fontWeight = "bold";
