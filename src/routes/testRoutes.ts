@@ -26,7 +26,6 @@ router.post(
   async (req: Request, res: Response) => {
     const { type } = req.params;
     const payload = dummy[type as keyof typeof dummy];
-    console.log("Formatted payload:", payload);
 
     if (!payload) {
       res
@@ -35,8 +34,11 @@ router.post(
       return;
     }
 
+    console.log("payload:", !!payload);
     const result = getFormattedMessage(payload);
+    console.log("result:", !!result);
     const message = generateMessage(result);
+    console.log("message:", !!message);
 
     try {
       if (message) {

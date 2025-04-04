@@ -2,7 +2,7 @@ export const dummy = {
   pushPayload: {
     ref: "refs/heads/main",
     pusher: {
-      name: "Joong-Rainy",
+      name: "wilddogco",
     },
     commits: [
       {
@@ -16,12 +16,12 @@ export const dummy = {
     ],
   },
   issuePayload: {
-    action: "opened",
+    action: "Opened",
     issue: {
       number: 456,
       title: "로그인 오류 발생",
       html_url: "https://github.com/your-repo/issues/456",
-      user: { login: "Joong-Rainy" },
+      user: { login: "Jian-Buk" },
     },
   },
   commentPayload: {
@@ -37,9 +37,9 @@ export const dummy = {
     },
   },
   pullRequestPayload: {
-    action: "opened",
+    action: "opened", // ALLOWED_ACTIONS: ["opened", "closed", "synchronize", "ready_for_review", "review_requested", "edited"]
+    number: 123,
     pull_request: {
-      number: 123,
       title: "로그인 기능 추가",
       user: { login: "Joong-Rainy" },
       base: { ref: "main" },
@@ -50,7 +50,7 @@ export const dummy = {
   pullRequestReviewPayload: {
     action: "submitted",
     review: {
-      user: { login: "DevReviewer" },
+      user: { login: "Bingho" },
       state: "approved",
       body: "Looks good to me!",
       html_url: "https://github.com/your-repo/pull/123#pullrequestreview-7890",
